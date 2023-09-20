@@ -1,4 +1,5 @@
 import json
+from counter import ResettableCounter
 
 from generator import MessageGenerator
 
@@ -50,7 +51,8 @@ class Messenger:
         room_id = message["response"]["room"]["alias"]
         return json.dumps(join).replace('"{room_id}"', f'"{room_id}"')
 
-    def handle_message(self, message):
+    def handle_message(self, message, counter: ResettableCounter):
+        print(counter.get_value())
         json_message = json.loads(message)
         if json_message["mess"] == "money":
             return json.dumps(pong)
@@ -58,7 +60,8 @@ class Messenger:
         if json_message["response"]["type"] == "publish":
             return self.join_room(json_message)
 
-        if json_message["response"]["type"] == "add":
+        if (json_message["response"]["type"] == "add") and counter.get_value() <= 1:
+            counter.increment()
             return json.dumps(hello).replace(
                 '"{text}"', f'"{self.message_generator.generate_random_phase()}"'
             )

@@ -1,4 +1,5 @@
 import threading
+from counter import ResettableCounter
 from messenger import Messenger
 
 from websocket_client import WebSocketClient
@@ -18,13 +19,15 @@ class Bot:
         self.thread = threading.Thread(target=self.websocket.start)
         self.thread.daemon = False
         self.message_handler = Messenger()
+        self.counter = ResettableCounter()
+        self.counter.start_reset_timer()
 
     def start(self):
         self.thread.start()
 
     def on_message(self, ws, message):
         print(f"{self.name} received a message: {message}")
-        response = self.message_handler.handle_message(message)
+        response = self.message_handler.handle_message(message, self.counter)
         if response != None:
             self.websocket.send_message(response)
 
