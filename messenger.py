@@ -63,6 +63,7 @@ class Messenger:
         if (json_message["response"]["type"] == "add") and counter.get_value() <= 1:
             counter.increment()
             return json.dumps(hello).replace(
-                '"{text}"', f'"{self.message_generator.generate_random_phase()}"'
+                '"{text}"',
+                f'"{self.message_generator.generate_random_phase_from_json()}"',
             )
         return None
