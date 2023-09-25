@@ -52,7 +52,6 @@ class Messenger:
         return json.dumps(join).replace('"{room_id}"', f'"{room_id}"')
 
     def handle_message(self, message, counter: ResettableCounter):
-        print(counter.get_value())
         json_message = json.loads(message)
         if json_message["mess"] == "money":
             return json.dumps(pong)
