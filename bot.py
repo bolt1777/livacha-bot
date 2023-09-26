@@ -16,11 +16,11 @@ class Bot:
             on_open_callback=self.on_open,
             on_close_callback=self.on_close,
         )
-        self.thread = threading.Thread(target=self.websocket.start)
-        self.thread.daemon = False
         self.message_handler = Messenger()
         self.counter = ResettableCounter()
         self.counter.start_reset_timer()
+        self.thread = threading.Thread(target=self.websocket.start())
+        self.thread.daemon = True
 
     def start(self):
         self.thread.start()
@@ -29,7 +29,7 @@ class Bot:
         print(f"{self.name} received a message: {message}")
         response = self.message_handler.handle_message(message, self.counter)
         if response != None:
-            self.websocket.send_message(response)
+            self.websocket.ws.send(response)
 
     def on_error(self, ws, error):
         print(f"{self.name} encountered an error: {error}")

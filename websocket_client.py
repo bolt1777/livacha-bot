@@ -31,11 +31,4 @@ class WebSocketClient:
             on_close=self.on_close_callback,
         )
         self.ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
-
-    def send_message(self, message):
-        if self.ws:
-            self.ws.send(message)
-
-    def stop(self):
-        if self.ws:
-            self.ws.close()
+        

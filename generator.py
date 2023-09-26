@@ -68,7 +68,7 @@ class MessageGenerator:
         random_phase = random.choice(funny_love_phrases)
         return random_phase
 
-    def generate_random_phase_from_json(self, file):
+    def generate_random_phase_from_json(self):
         f = open("phrases.json", "r")
         json_load = json.loads(f.read().encode("utf-8"))
         return random.choice(json_load["data"])[0]
